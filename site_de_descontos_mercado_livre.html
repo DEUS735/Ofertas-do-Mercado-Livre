@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ofertas Automáticas</title>
+
+  <style>
+    body { margin:0; font-family: Arial; background:#f5f5f5; }
+    header { background:#ffe600; padding:15px; text-align:center; font-size:26px; font-weight:bold; }
+    .top-bar { padding:10px; text-align:center; background:#fff; }
+    input { width:80%; padding:10px; border-radius:8px; border:1px solid #ccc; }
+    .container { display:grid; grid-template-columns: repeat(auto-fit,minmax(250px,1fr)); gap:20px; padding:20px; }
+    .card { background:#fff; border-radius:12px; padding:15px; box-shadow:0 3px 10px rgba(0,0,0,0.1); text-align:center; }
+    .card img { max-width:100%; border-radius:10px; }
+    .price { color:green; font-size:20px; font-weight:bold; }
+    .btn { display:inline-block; margin-top:10px; padding:10px; background:#3483fa; color:#fff; border-radius:5px; text-decoration:none; }
+  </style>
+</head>
+<body>
+
+<header>🔥 Ofertas Automáticas (Mercado Livre)</header>
+
+<div class="top-bar">
+  <input type="text" id="search" placeholder="Buscar produto..." onkeyup="buscarProdutos()">
+</div>
+
+<div class="container" id="products"></div>
+
+<script>
+
+async function buscarProdutos() {
+  const query = document.getElementById('search').value || 'promoção';
+
+  const url = `https://api.mercadolibre.com/sites/MLB/search?q=${query}`;
+
+  const res = await fetch(url);
+  const data = await res.json();
+
+  renderProdutos(data.results);
+}
+
+function renderProdutos(lista) {
+  const container = document.getElementById('products');
+  container.innerHTML = '';
+
+  lista.slice(0, 20).forEach(p => {
+    container.innerHTML += `
+      <div class="card">
+        <img src="${p.thumbnail}">
+        <h3>${p.title}</h3>
+        <p class="price">R$ ${p.price}</p>
+        <a class="btn" href="${p.permalink}" target="_blank">Ver Oferta</a>
+      </div>
+    `;
+  });
+}
+
+// carregar automático
+buscarProdutos();
+
+</script>
+
+</body>
+</html>
