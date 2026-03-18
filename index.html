@@ -57,7 +57,8 @@ function renderProdutos(lista) {
 }
 
 // carregar automático
-buscarProdutos();
+async function buscarProdutos() {
+  const query = document.getElementById('search').value || 'ofertas';
 
 </script>
 
